@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kikker Band - Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c5530;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: #2c5530;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #2c5530;
+            color: white;
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .refresh-btn {
+            background-color: #7cb342;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .refresh-btn:hover {
+            background-color: #689f38;
+        }
+        
+        .status-confirmed {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        
+        .error {
+            color: #f44336;
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2c5530 0%, #4a7c59 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-logo {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 2rem;
+            animation: hop 1.2s ease-in-out infinite;
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .loading-dots {
+            color: #c8e6c9;
+            font-size: 2rem;
+        }
+
+        /* Hopping animation for the logo */
+        @keyframes hop {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            25% {
+                transform: translateY(-20px) scale(1.1);
+            }
+            50% {
+                transform: translateY(-40px) scale(1.2);
+            }
+            75% {
+                transform: translateY(-20px) scale(1.1);
+            }
+        }
+
+        /* Dots animation */
+        @keyframes dots {
+            0%, 20% {
+                content: '';
+            }
+            40% {
+                content: '.';
+            }
+            60% {
+                content: '..';
+            }
+            80%, 100% {
+                content: '...';
+            }
+        }
+
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s linear infinite;
+        }
+
+        /* Page content hidden during loading */
+        .page-content {
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+
+        .page-content.loaded {
+            opacity: 1;
+        }
+    </style>
+    <script src="demo-config.js"></script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <img src="kikker-logo.svg" alt="Kikker Logo" class="loading-logo">
+        <div class="loading-text">Admin Dashboard wordt geladen</div>
+        <div class="loading-dots"></div>
+    </div>
+
+    <!-- Page Content -->
+    <div id="pageContent" class="page-content">
+    
+    <!-- Demo Banner (only shows on demo sites) -->
+    <div id="demoBanner" class="demo-banner" style="display: none;">
+        🐸 DEMO ADMIN - Voor echte admin toegang: <a href="mailto:info@kikkerband.nl">info@kikkerband.nl</a>
+    </div>
+    
+    <div class="container">
+        <h1>Kikker Band - Admin Dashboard</h1>
+        
+        <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+            <button class="refresh-btn" onclick="loadOrders()">Ververs Gegevens</button>
+            <button class="refresh-btn" style="background-color: #2c5530;" onclick="showAddEventForm()">Nieuw Evenement Toevoegen</button>
+        </div>
+        
+        <div class="stats" id="stats">
+            <div class="stat-card">
+                <h3 id="totalOrders">0</h3>
+                <p>Totaal Bestellingen</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="totalTickets">0</h3>
+                <p>Totaal Tickets Verkocht</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="totalRevenue">€0</h3>
+                <p>Totale Omzet</p>
+            </div>
+        </div>
+        
+        <h2>Bestellingen</h2>
+        <div id="ordersContainer">
+            <p class="loading">Bestellingen laden...</p>
+        </div>
+        
+        <h2 style="margin-top: 3rem;">Evenementen</h2>
+        <div id="eventsContainer">
+            <p class="loading">Evenementen laden...</p>
+        </div>
+    </div>
+    
+    <!-- Add Event Modal -->
+    <div id="eventModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+        <div style="background-color: white; margin: 5% auto; padding: 2rem; width: 90%; max-width: 500px; border-radius: 10px; position: relative;">
+            <span style="position: absolute; right: 20px; top: 10px; font-size: 28px; cursor: pointer;" onclick="closeEventForm()">&times;</span>
+            <h2>Nieuw Evenement Toevoegen</h2>
+            <form id="eventForm" onsubmit="addEvent(event)">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Naam:</label>
+                    <input type="text" id="eventName" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Datum & Tijd:</label>
+                    <input type="text" id="eventDate" placeholder="bijv. 15 September 2025 - 20:00" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Locatie:</label>
+                    <input type="text" id="eventLocation" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Prijs per ticket (€):</label>
+                    <input type="number" id="eventPrice" min="0" step="0.01" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Aantal beschikbare tickets:</label>
+                    <input type="number" id="eventTickets" min="1" value="100" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <button type="submit" style="width: 100%; background-color: #7cb342; color: white; border: none; padding: 15px; border-radius: 5px; font-size: 1.1rem; font-weight: bold; cursor: pointer;">Evenement Toevoegen</button>
+            </form>
+        </div>
+    </div>
+    </div> <!-- End page content -->
+
+    <script>
+        // Show loading screen
+        function showLoading() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const pageContent = document.getElementById('pageContent');
+            
+            if (loadingScreen) {
+                loadingScreen.classList.remove('hidden');
+            }
+            if (pageContent) {
+                pageContent.classList.remove('loaded');
+            }
+        }
+
+        // Hide loading screen
+        function hideLoading() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const pageContent = document.getElementById('pageContent');
+            
+            setTimeout(() => {
+                if (loadingScreen) {
+                    loadingScreen.classList.add('hidden');
+                }
+                if (pageContent) {
+                    pageContent.classList.add('loaded');
+                }
+            }, 1000); // Show loading for at least 1 second
+        }
+        async function loadEvents() {
+            const container = document.getElementById('eventsContainer');
+            container.innerHTML = '<p class="loading">Evenementen laden...</p>';
+            
+            try {
+                let data;
+                
+                if (window.IS_DEMO) {
+                    data = await window.DEMO_API.getEvents();
+                } else {
+                    const response = await fetch(`${window.KIKKER_CONFIG.API_BASE}/events`);
+                    data = await response.json();
+                }
+                
+                if (data.events && data.events.length > 0) {
+                    let tableHTML = `
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Naam</th>
+                                    <th>Datum</th>
+                                    <th>Locatie</th>
+                                    <th>Prijs</th>
+                                    <th>Beschikbare Tickets</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    
+                    data.events.forEach(event => {
+                        tableHTML += `
+                            <tr>
+                                <td>${event.name}</td>
+                                <td>${event.date}</td>
+                                <td>${event.location}</td>
+                                <td>€${event.price.toFixed(2)}</td>
+                                <td>${event.available_tickets}</td>
+                            </tr>
+                        `;
+                    });
+                    
+                    tableHTML += '</tbody></table>';
+                    container.innerHTML = tableHTML;
+                } else {
+                    container.innerHTML = '<p>Nog geen evenementen gevonden.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading events:', error);
+                container.innerHTML = '<p class="error">Fout bij het laden van evenementen.</p>';
+            }
+        }
+        
+        function showAddEventForm() {
+            document.getElementById('eventModal').style.display = 'block';
+            document.getElementById('eventForm').reset();
+        }
+        
+        function closeEventForm() {
+            document.getElementById('eventModal').style.display = 'none';
+        }
+        
+        async function addEvent(event) {
+            event.preventDefault();
+            
+            const eventData = {
+                name: document.getElementById('eventName').value,
+                date: document.getElementById('eventDate').value,
+                location: document.getElementById('eventLocation').value,
+                price: parseFloat(document.getElementById('eventPrice').value),
+                available_tickets: parseInt(document.getElementById('eventTickets').value)
+            };
+            
+            try {
+                let result;
+                
+                if (window.IS_DEMO) {
+                    result = await window.DEMO_API.createEvent(eventData);
+                } else {
+                    const response = await fetch(`${window.KIKKER_CONFIG.API_BASE}/admin/events`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(eventData)
+                    });
+                    
+                    result = await response.json();
+                }
+                
+                if (result.success) {
+                    alert('Evenement succesvol toegevoegd!');
+                    closeEventForm();
+                    loadEvents();
+                    // The main website will automatically pick up the new event
+                } else {
+                    alert(`Fout: ${result.error || 'Probeer het later opnieuw.'}`);
+                }
+            } catch (error) {
+                console.error('Error adding event:', error);
+                alert('Fout bij het toevoegen van het evenement.');
+            }
+        }
+        
+        async function loadOrders() {
+            const container = document.getElementById('ordersContainer');
+            container.innerHTML = '<p class="loading">Bestellingen laden...</p>';
+            
+            try {
+                let data;
+                
+                if (window.IS_DEMO) {
+                    data = await window.DEMO_API.getOrders();
+                } else {
+                    const response = await fetch(`${window.KIKKER_CONFIG.API_BASE}/admin/orders`);
+                    data = await response.json();
+                }
+                
+                if (data.orders && data.orders.length > 0) {
+                    // Calculate stats
+                    let totalTickets = 0;
+                    let totalRevenue = 0;
+                    
+                    data.orders.forEach(order => {
+                        totalTickets += order.ticket_quantity;
+                        totalRevenue += order.total_amount;
+                    });
+                    
+                    // Update stats
+                    document.getElementById('totalOrders').textContent = data.orders.length;
+                    document.getElementById('totalTickets').textContent = totalTickets;
+                    document.getElementById('totalRevenue').textContent = `€${totalRevenue.toFixed(2)}`;
+                    
+                    // Create table
+                    let tableHTML = `
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Bestelnummer</th>
+                                    <th>Evenement</th>
+                                    <th>Klant</th>
+                                    <th>Email</th>
+                                    <th>Tickets</th>
+                                    <th>Bedrag</th>
+                                    <th>Datum</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    
+                    data.orders.forEach(order => {
+                        tableHTML += `
+                            <tr>
+                                <td>${order.order_number}</td>
+                                <td>${order.event}</td>
+                                <td>${order.customer_name}</td>
+                                <td>${order.customer_email}</td>
+                                <td>${order.ticket_quantity}</td>
+                                <td>€${order.total_amount.toFixed(2)}</td>
+                                <td>${new Date(order.order_date).toLocaleDateString('nl-NL')}</td>
+                                <td class="status-${order.status}">${order.status}</td>
+                            </tr>
+                        `;
+                    });
+                    
+                    tableHTML += '</tbody></table>';
+                    container.innerHTML = tableHTML;
+                } else {
+                    container.innerHTML = '<p>Nog geen bestellingen gevonden.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                container.innerHTML = `<p class="error">Fout bij het laden van bestellingen. Zorg ervoor dat de backend draait op ${window.KIKKER_CONFIG.BACKEND_URL}</p>`;
+            }
+        }
+        
+        // Load data on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Show demo banner if in demo mode
+            if (window.IS_DEMO) {
+                document.getElementById('demoBanner').style.display = 'block';
+            }
+            
+            showLoading();
+            
+            // Load data and then hide loading screen
+            Promise.all([loadOrders(), loadEvents()])
+                .finally(() => {
+                    hideLoading();
+                });
+        });
+        
+        // Auto refresh every 30 seconds
+        setInterval(() => {
+            loadOrders();
+            loadEvents();
+        }, 30000);
+    </script>
+</body>
+</html>

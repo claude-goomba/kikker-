@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kikker - Nederlandse Band</title>
+    <meta name="description" content="Kikker is een veelzijdige Nederlandse band voor bruiloften, bedrijfsfeesten, festivals en privéfeesten">
+    <link rel="stylesheet" href="styles.css">
+    <script src="demo-config.js"></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <img src="kikker-logo.svg" alt="Kikker Logo" class="loading-logo">
+        <div class="loading-text">Kikker wordt geladen</div>
+        <div class="loading-dots"></div>
+    </div>
+
+    <!-- Page Content -->
+    <div id="pageContent" class="page-content">
+    
+    <!-- Demo Banner (only shows on demo sites) -->
+    <div id="demoBanner" class="demo-banner" style="display: none;">
+        🐸 DEMO WEBSITE - Voor echte tickets: <a href="mailto:info@kikkerband.nl">info@kikkerband.nl</a> of <a href="tel:06-12345678">06-12345678</a>
+    </div>
+    
+    <header>
+        <nav>
+            <div class="nav-container">
+                <div class="logo">
+                    <img src="kikker-logo.svg" alt="Kikker Band Logo" height="50">
+                </div>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#over">Over Ons</a></li>
+                    <li><a href="#werk">Ons Werk</a></li>
+                    <li><a href="#optredens">Optredens</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1>Kikker</h1>
+                <p class="subtitle">De sprankelende Nederlandse band die uw evenement onvergetelijk maakt!</p>
+                <a href="#contact" class="cta-button">Boek Ons Nu</a>
+            </div>
+        </section>
+
+        <section id="over" class="about">
+            <div class="container">
+                <h2>Over Kikker</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Welkom bij Kikker, de energieke band die al meer dan 10 jaar het Nederlandse publiek vermaakt. Wij zijn een groep gepassioneerde muzikanten die leven voor het podium en de interactie met ons publiek.</p>
+                        <p>Met een breed repertoire van Nederlandse klassiekers tot moderne hits, zorgen wij voor de perfecte muzikale invulling van elk evenement. Van intieme bruiloften tot grote festivals, Kikker brengt altijd de juiste sfeer.</p>
+                    </div>
+                    <div class="about-image">
+                        <img src="kikker-logo.svg" alt="Kikker Band" class="band-logo">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="werk" class="work">
+            <div class="container">
+                <h2>Ons Werk</h2>
+                <p class="section-intro">Kikker is gespecialiseerd in het verzorgen van live optredens voor diverse gelegenheden. Onze professionele aanpak en jarenlange ervaring maken ons de ideale keuze voor uw evenement.</p>
+                <div class="features">
+                    <div class="feature">
+                        <h3>Bruiloften & Partijen</h3>
+                        <p>Van de ceremonie tot het feest, wij zorgen voor de perfecte muzikale begeleiding. Onze setlist wordt volledig afgestemd op uw wensen en die van uw gasten.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Bedrijfsevenementen</h3>
+                        <p>Professionele entertainment voor bedrijfsfeesten, productlanceringen en zakelijke bijeenkomsten. Wij creëren de juiste ambiance voor uw zakelijke evenement.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Festivals & Podia</h3>
+                        <p>Met onze energieke shows brengen we elk festival tot leven. Van kleinschalige podia tot grote festivalterreinen, Kikker weet het publiek te boeien.</p>
+                    </div>
+                </div>
+                <div class="work-details">
+                    <h3>Onze Werkwijze</h3>
+                    <ul>
+                        <li><strong>Persoonlijk Contact:</strong> We bespreken uitgebreid uw wensen en verwachtingen</li>
+                        <li><strong>Maatwerk Setlist:</strong> Elke playlist wordt speciaal samengesteld voor uw evenement</li>
+                        <li><strong>Professionele Apparatuur:</strong> Wij zorgen voor hoogwaardige geluidsinstallaties</li>
+                        <li><strong>Flexibele Bezetting:</strong> Van akoestisch duo tot volledige band met blazerssectie</li>
+                        <li><strong>Complete Verzorging:</strong> Van soundcheck tot laatste nummer, alles perfect geregeld</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="optredens" class="performances">
+            <div class="container">
+                <h2>Komende Optredens</h2>
+                <div class="performance-grid">
+                    <div class="performance-card">
+                        <h3>Zomerfestival Groningen</h3>
+                        <p class="date">15 Juli 2025 - 20:00</p>
+                        <p class="location">Stadspark, Groningen</p>
+                        <p class="type">Festival</p>
+                        <p class="price">€25,- per ticket</p>
+                        <button class="buy-ticket-btn" onclick="openTicketModal('Zomerfestival Groningen', '15 Juli 2025 - 20:00', 25)">Koop Tickets</button>
+                    </div>
+                    <div class="performance-card">
+                        <h3>Havenfestival Rotterdam</h3>
+                        <p class="date">22 Juli 2025 - 19:30</p>
+                        <p class="location">Wilhelminapier, Rotterdam</p>
+                        <p class="type">Festival</p>
+                        <p class="price">€30,- per ticket</p>
+                        <button class="buy-ticket-btn" onclick="openTicketModal('Havenfestival Rotterdam', '22 Juli 2025 - 19:30', 30)">Koop Tickets</button>
+                    </div>
+                    <div class="performance-card">
+                        <h3>Bedrijfsfeest Amsterdam</h3>
+                        <p class="date">5 Augustus 2025 - 21:00</p>
+                        <p class="location">Privé locatie</p>
+                        <p class="type">Besloten evenement</p>
+                        <p class="price">Alleen op uitnodiging</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <div class="container">
+                <h2>Boek Kikker Voor Uw Evenement</h2>
+                <div class="contact-info">
+                    <p class="contact-intro">Interesse in een optreden van Kikker? Neem vrijblijvend contact met ons op voor meer informatie over beschikbaarheid en mogelijkheden.</p>
+                    <div class="contact-details">
+                        <p><strong>Email:</strong> info@kikkerband.nl</p>
+                        <p><strong>Telefoon:</strong> 06-12345678</p>
+                        <p><strong>Social Media:</strong> @kikkerband</p>
+                    </div>
+                    <div class="booking-info">
+                        <h3>Wat wij nodig hebben:</h3>
+                        <ul>
+                            <li>Datum en tijdstip van uw evenement</li>
+                            <li>Locatie en type evenement</li>
+                            <li>Verwacht aantal gasten</li>
+                            <li>Gewenste speelduur</li>
+                            <li>Specifieke muziekwensen</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <img src="kikker-logo.svg" alt="Kikker Logo" height="40">
+            <p>&copy; 2025 Kikker - Nederlandse Band. Alle rechten voorbehouden.</p>
+        </div>
+    </footer>
+
+    <!-- Ticket Modal -->
+    <div id="ticketModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeTicketModal()">&times;</span>
+            <h2>Koop Tickets</h2>
+            <div id="ticketDetails">
+                <p class="event-name"></p>
+                <p class="event-date"></p>
+                <p class="ticket-price"></p>
+            </div>
+            <form id="ticketForm" onsubmit="processTicketOrder(event)">
+                <div class="form-group">
+                    <label for="ticketAmount">Aantal tickets:</label>
+                    <input type="number" id="ticketAmount" min="1" max="10" value="1" required onchange="updateTotalPrice()">
+                </div>
+                <div class="form-group">
+                    <label for="customerName">Naam:</label>
+                    <input type="text" id="customerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerEmail">Email:</label>
+                    <input type="email" id="customerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerPhone">Telefoon:</label>
+                    <input type="tel" id="customerPhone" required>
+                </div>
+                <div class="total-section">
+                    <h3>Totaal: <span id="totalPrice">€0,-</span></h3>
+                </div>
+                <button type="submit" class="submit-btn">Bestelling Plaatsen</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeConfirmationModal()">&times;</span>
+            <h2>Bestelling Bevestigd!</h2>
+            <div class="confirmation-message">
+                <p>Bedankt voor uw bestelling!</p>
+                <p>U ontvangt binnen enkele minuten een bevestigingsmail met uw tickets.</p>
+                <p class="order-details"></p>
+            </div>
+            <button class="submit-btn" onclick="closeConfirmationModal()">Sluiten</button>
+        </div>
+    </div>
+    </div> <!-- End page content -->
+</body>
+</html>
