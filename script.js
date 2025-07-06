@@ -3,6 +3,23 @@ let currentEvent = '';
 let currentDate = '';
 let ticketPrice = 0;
 
+// Mobile menu functions
+function toggleMobileMenu() {
+    const navMenu = document.querySelector('.nav-menu');
+    const menuToggle = document.querySelector('.mobile-menu-toggle');
+    
+    navMenu.classList.toggle('active');
+    menuToggle.classList.toggle('active');
+}
+
+function closeMobileMenu() {
+    const navMenu = document.querySelector('.nav-menu');
+    const menuToggle = document.querySelector('.mobile-menu-toggle');
+    
+    navMenu.classList.remove('active');
+    menuToggle.classList.remove('active');
+}
+
 // Open ticket modal
 function openTicketModal(eventName, eventDate, price) {
     currentEvent = eventName;
@@ -135,12 +152,21 @@ function closeConfirmationModal() {
 window.onclick = function(event) {
     const ticketModal = document.getElementById('ticketModal');
     const confirmationModal = document.getElementById('confirmationModal');
+    const navMenu = document.querySelector('.nav-menu');
+    const menuToggle = document.querySelector('.mobile-menu-toggle');
     
     if (event.target == ticketModal) {
         closeTicketModal();
     }
     if (event.target == confirmationModal) {
         closeConfirmationModal();
+    }
+    
+    // Close mobile menu when clicking outside
+    if (navMenu && navMenu.classList.contains('active')) {
+        if (!event.target.closest('.nav-menu') && !event.target.closest('.mobile-menu-toggle')) {
+            closeMobileMenu();
+        }
     }
 }
 
