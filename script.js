@@ -279,10 +279,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Show demo banner if in demo mode
-    if (window.IS_DEMO) {
-        document.getElementById('demoBanner').style.display = 'block';
-    }
     
     // Load events on page load with loading screen
     loadEvents(true);
